@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main extends Activity {
-	// 显示组件
+	// 显示组件 顶顶顶顶
 		private ImageButton imgBtn_Previous;
 		private ImageButton imgBtn_PlayOrPause;
 		private ImageButton imgBtn_Stop;
