@@ -31,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main extends Activity {
-	// ��ʾ���
+	// ��ʾ���顶顶顶
 		private ImageButton imgBtn_Previous;
 		private ImageButton imgBtn_PlayOrPause;
 		private ImageButton imgBtn_Stop;
