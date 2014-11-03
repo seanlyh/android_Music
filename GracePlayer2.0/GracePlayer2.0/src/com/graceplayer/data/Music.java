@@ -4,7 +4,6 @@ package com.graceplayer.data;
  * Music类，包括歌曲名，艺术家，路径，时长等属性，
  * 以及相关的获取方法
  * */
-//测试2014...
 public class Music {
 
 	private String musicName;
