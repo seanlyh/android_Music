@@ -38,23 +38,26 @@ public final class R {
         public static final int previous_pressed=0x7f020015;
         public static final int stop=0x7f020016;
         public static final int stop_pressed=0x7f020017;
+        public static final int widget_bg=0x7f020018;
     }
     public static final class id {
-        public static final int imageButton1=0x7f060004;
-        public static final int imageButton2=0x7f060005;
-        public static final int imageButton3=0x7f060006;
-        public static final int imageButton4=0x7f060007;
-        public static final int linearLayout1=0x7f060002;
-        public static final int linearLayout2=0x7f060003;
-        public static final int listView1=0x7f060001;
-        public static final int relativeLayout1=0x7f060000;
-        public static final int relativeLayout2=0x7f060009;
-        public static final int seekBar1=0x7f060008;
-        public static final int textView1=0x7f06000a;
-        public static final int textView2=0x7f06000b;
+        public static final int imageButton1=0x7f060006;
+        public static final int imageButton2=0x7f060007;
+        public static final int imageButton3=0x7f060008;
+        public static final int imageButton4=0x7f060009;
+        public static final int linearLayout1=0x7f060004;
+        public static final int linearLayout2=0x7f060005;
+        public static final int listView1=0x7f060003;
+        public static final int listview_tv_artist_item=0x7f060001;
+        public static final int listview_tv_title_item=0x7f060000;
+        public static final int relativeLayout1=0x7f060002;
+        public static final int seekBar1=0x7f06000a;
+        public static final int textView1=0x7f06000b;
+        public static final int textView2=0x7f06000c;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int listview=0x7f030000;
+        public static final int main=0x7f030001;
     }
     public static final class string {
         public static final int about=0x7f050004;
