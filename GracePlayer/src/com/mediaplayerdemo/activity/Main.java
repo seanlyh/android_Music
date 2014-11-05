@@ -1,6 +1,12 @@
 package com.mediaplayerdemo.activity;
 
 
+
+import java.util.ArrayList;
+
+import com.graceplayer.data.Music;
+import com.graceplayer.data.MusicList;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -55,12 +61,16 @@ public class Main extends Activity {
 		private static final int MODE_LIST_SEQUENCE = 0;
 		private static final int MODE_SINGLE_CYCLE = 1;
 		private static final int MODE_LIST_CYCLE = 2;
-	
+		private int playmode;
+		
+		//歌曲列表对象
+		private ArrayList<Music> musicArrayList;
+
 		//主题
 		private RelativeLayout root_Layout;
 		
 		// 当前歌曲的序号，下标从1开始
-		private int number;
+		private int number = 0;
 		//播放状态
 		private int status;
 		//广播接收器
@@ -85,6 +95,9 @@ public class Main extends Activity {
 			sendBroadcastOnCommand(MusicService.COMMAND_CHECK_IS_PLAYING);
 			//初始化进度条
 			initSeekBarHandler();
+			
+			//默认播放模式是顺讯播放
+			//playmode = Main.MODE_LIST_SEQUENCE;
 		}
 		
 		/**绑定广播接收器*/
@@ -220,13 +233,13 @@ public class Main extends Activity {
 			setTheme(theme);
 		}
 		
-		/** 初始化音乐列表。包括获取音乐集和更新显示列表 */
+		//** 初始化音乐列表。包括获取音乐集和更新显示列表 */
 		private void initMusicList() {
 			Cursor cursor = getMusicCursor();
 			setListContent(cursor);
 		}
 
-		/** 更新列表的内容 */
+		//** 更新列表的内容 */
 		private void setListContent(Cursor musicCursor) {
 			CursorAdapter adapter = new SimpleCursorAdapter(this,
 					android.R.layout.simple_list_item_2, musicCursor, new String[] {
@@ -236,7 +249,7 @@ public class Main extends Activity {
 			list.setAdapter(adapter);
 		}
 
-		/** 获取系统扫描得到的音乐媒体集 */
+		//** 获取系统扫描得到的音乐媒体集 */
 		private Cursor getMusicCursor() {
 			// 获取数据选择器
 			ContentResolver resolver = getContentResolver();
@@ -326,7 +339,27 @@ public class Main extends Activity {
 					imgBtn_PlayOrPause.setBackgroundResource(R.drawable.play);
 					break;
 				case MusicService.STATUS_COMPLETED:
-					sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+					//sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+					number = intent.getIntExtra("number", 0);
+					if(playmode == Main.MODE_LIST_SEQUENCE)		//顺序模式：到达列表末端时发送停止命令，否则播放下一首
+					{
+						if(number == MusicList.getMusicList().size()-1) 											
+							sendBroadcastOnCommand(MusicService.STATUS_STOPPED);
+						else
+							sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+					}
+					else if(playmode == Main.MODE_SINGLE_CYCLE)								//单曲循环
+						sendBroadcastOnCommand(MusicService.COMMAND_PLAY);
+					else if(playmode == Main.MODE_LIST_CYCLE)			//列表循环：到达列表末端时，把要播放的音乐设置为第一首，
+					{																															//					然后发送播放命令。			
+						if(number == list.getCount()-1)
+						{
+							number = 0;
+							sendBroadcastOnCommand(MusicService.COMMAND_PLAY);
+						}
+						else sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+					}
+					
 					seekBarHandler.sendEmptyMessage(PROGRESS_RESET);
 					imgBtn_PlayOrPause.setBackgroundResource(R.drawable.play);
 					break;
@@ -413,15 +446,18 @@ public class Main extends Activity {
 		//Menu常量
 		private static final int MENU_THEME = Menu.FIRST;
 		private static final int MENU_ABOUT = Menu.FIRST +1;
+		private static final int MENU_PLAYMODE = Menu.FIRST +2;
+
 		//创建菜单
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
 			menu.add(0, MENU_THEME, 0, "主题");
 			menu.add(0, MENU_ABOUT, 1, "关于");
+			menu.add(0, MENU_PLAYMODE, 2, "播放模式");
 			return super.onCreateOptionsMenu(menu);		
 		}
 		
-		//处理菜单单点击事件
+		//处理菜单点击事件
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch(item.getItemId()) {
@@ -444,6 +480,45 @@ public class Main extends Activity {
 				new AlertDialog.Builder(this).setTitle("I am DJ")
 				       .setMessage(Main.this.getString(R.string.about)).show();
 				break;
+				
+			case MENU_PLAYMODE:
+				String[] mode = new String[] { "顺序播放", "单曲循环", "列表循环" };
+				AlertDialog.Builder builder = new AlertDialog.Builder(
+						Main.this);
+				builder.setTitle("播放模式");
+				builder.setSingleChoiceItems(mode, playmode,						//设置单选项，这里第二个参数是默认选择的序号，这里根据playmode的值来确定
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								playmode = arg1;
+							}
+						});
+				builder.setPositiveButton("确定",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface arg0, int arg1) {
+								// TODO Auto-generated method stub
+								switch (playmode) {
+								case 0:
+									playmode = Main.MODE_LIST_SEQUENCE;
+									Toast.makeText(getApplicationContext(), R.string.sequance, Toast.LENGTH_SHORT).show();
+									break;
+								case 1:
+									playmode = Main.MODE_SINGLE_CYCLE;
+									Toast.makeText(getApplicationContext(), R.string.singlecycle, Toast.LENGTH_SHORT).show();
+									break;
+								case 2:
+									playmode = Main.MODE_LIST_CYCLE;
+									Toast.makeText(getApplicationContext(), R.string.listcycle, Toast.LENGTH_SHORT).show();
+									break;
+								default:
+									break;
+								}
+							}
+						});
+				builder.create().show(); 
+				break;		
 			}
 			return super.onOptionsItemSelected(item);
 		} 
