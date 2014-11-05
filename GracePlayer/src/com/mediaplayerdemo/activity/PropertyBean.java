@@ -25,7 +25,7 @@ public class PropertyBean  {
 	  DEFAULT_THEME = THEMES[0];
 	  loadTheme();
   }
-  //¶ÁÈ¡Ö÷Ìâ¡£±£´æÔÚÎÄ¼şconfiguration.cfgÖĞ
+  //è¯»å–ä¸»é¢˜ã€‚ä¿å­˜åœ¨æ–‡ä»¶configuration.cfgä¸­
   private void loadTheme() {
 	  Properties properties = new Properties(); 
 	  try {
@@ -37,7 +37,7 @@ public class PropertyBean  {
 	  }
   }	
   
-  //±£´æÖ÷Ìâ¡£±£´æÔÚÎÄ¼şconfiguration.cfgÖĞ
+  //ä¿å­˜ä¸»é¢˜ã€‚ä¿å­˜åœ¨æ–‡ä»¶configuration.cfgä¸­
 	private boolean saveTheme(String theme) {
 		Properties properties = new Properties();
 		properties.put("theme", theme);

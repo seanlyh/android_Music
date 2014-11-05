@@ -31,8 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main extends Activity {
-	// ÏÔÊ¾×é¼ş
-	//²âÊÔ
+	// æ˜¾ç¤ºç»„ä»¶
+	//æµ‹è¯•
 		private ImageButton imgBtn_Previous;
 		private ImageButton imgBtn_PlayOrPause;
 		private ImageButton imgBtn_Stop;
@@ -42,28 +42,28 @@ public class Main extends Activity {
 		private TextView text_Current;
 		private TextView text_Duration;
 		private SeekBar seekBar;
-		//¸üĞÂ½ø¶ÈÌõµÄHander
+		//æ›´æ–°è¿›åº¦æ¡çš„Hander
 		private Handler seekBarHandler;
 		private int duration;
 		private int time;
-		//½ø¶ÈÌõ¿ØÖÆ³£Á¿
+		//è¿›åº¦æ¡æ§åˆ¶å¸¸é‡
 		private static final int PROGRESS_INCREASE = 0;
 		private static final int PROGRESS_PAUSE = 1;
 		private static final int PROGRESS_RESET = 2;
 		
-		//²¥·ÅÄ£Ê½³£Á¿
+		//æ’­æ”¾æ¨¡å¼å¸¸é‡
 		private static final int MODE_LIST_SEQUENCE = 0;
 		private static final int MODE_SINGLE_CYCLE = 1;
 		private static final int MODE_LIST_CYCLE = 2;
 	
-		//Ö÷Ìâ
+		//ä¸»é¢˜
 		private RelativeLayout root_Layout;
 		
-		// µ±Ç°¸èÇúµÄĞòºÅ£¬ÏÂ±ê´Ó1¿ªÊ¼
+		// å½“å‰æ­Œæ›²çš„åºå·ï¼Œä¸‹æ ‡ä»1å¼€å§‹
 		private int number;
-		//²¥·Å×´Ì¬
+		//æ’­æ”¾çŠ¶æ€
 		private int status;
-		//¹ã²¥½ÓÊÕÆ÷
+		//å¹¿æ’­æ¥æ”¶å™¨
 		private StatusChangedReceiver receiver;
 
 		/** Called when the activity is first created. */
@@ -79,15 +79,15 @@ public class Main extends Activity {
 			duration = 0;
 			time = 0;
 			startService(new Intent(this,MusicService.class));
-			//°ó¶¨¹ã²¥½ÓÊÕÆ÷£¬¿ÉÒÔ½ÓÊÕ¹ã²¥
+			//ç»‘å®šå¹¿æ’­æ¥æ”¶å™¨ï¼Œå¯ä»¥æ¥æ”¶å¹¿æ’­
 			bindStatusChangedReceiver();
-			//¼ì²é²¥·ÅÆ÷ÊÇ·ñÕıÔÚ²¥·Å¡£Èç¹ûÕıÔÚ²¥·Å£¬ÒÔÉÏ°ó¶¨µÄ½ÓÊÕÆ÷»á¸Ä±äUI
+			//æ£€æŸ¥æ’­æ”¾å™¨æ˜¯å¦æ­£åœ¨æ’­æ”¾ã€‚å¦‚æœæ­£åœ¨æ’­æ”¾ï¼Œä»¥ä¸Šç»‘å®šçš„æ¥æ”¶å™¨ä¼šæ”¹å˜UI
 			sendBroadcastOnCommand(MusicService.COMMAND_CHECK_IS_PLAYING);
-			//³õÊ¼»¯½ø¶ÈÌõ
+			//åˆå§‹åŒ–è¿›åº¦æ¡
 			initSeekBarHandler();
 		}
 		
-		/**°ó¶¨¹ã²¥½ÓÊÕÆ÷*/
+		/**ç»‘å®šå¹¿æ’­æ¥æ”¶å™¨*/
 		private void bindStatusChangedReceiver() {
 			receiver =new StatusChangedReceiver();
 			IntentFilter filter = new IntentFilter(
@@ -95,7 +95,7 @@ public class Main extends Activity {
 			registerReceiver(receiver,filter);
 		}
 
-		/** »ñÈ¡ÏÔÊ¾×é¼ş */
+		/** è·å–æ˜¾ç¤ºç»„ä»¶ */
 		private void findViews() {
 			imgBtn_Previous = (ImageButton) findViewById(R.id.imageButton1);
 			imgBtn_PlayOrPause = (ImageButton) findViewById(R.id.imageButton2);
@@ -108,7 +108,7 @@ public class Main extends Activity {
 			root_Layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
 		}
 
-		/** ÎªÏÔÊ¾×é¼ş×¢²á¼àÌıÆ÷ */
+		/** ä¸ºæ˜¾ç¤ºç»„ä»¶æ³¨å†Œç›‘å¬å™¨ */
 		private void registerListeners() {
 			imgBtn_Previous.setOnClickListener(new OnClickListener() {
 				public void onClick(View view) {
@@ -139,7 +139,7 @@ public class Main extends Activity {
 			list.setOnItemClickListener(new OnItemClickListener() {
 				public void onItemClick(AdapterView<?> parent, View view,
 						int position, long id) {
-					// positionÏÂ±ê´Ó0¿ªÊ¼£¬numberÏÂ±ê´Ó1¿ªÊ¼
+					// positionä¸‹æ ‡ä»0å¼€å§‹ï¼Œnumberä¸‹æ ‡ä»1å¼€å§‹
 					number = position + 1;
 					sendBroadcastOnCommand(MusicService.COMMAND_PLAY);
 				}
@@ -148,7 +148,7 @@ public class Main extends Activity {
 			seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 				@Override
 				public void onStopTrackingTouch(SeekBar seekBar) {
-					//·¢ËÍ¹ã²¥¸øMusicService£¬Ö´ĞĞÌø×ª
+					//å‘é€å¹¿æ’­ç»™MusicServiceï¼Œæ‰§è¡Œè·³è½¬
 					sendBroadcastOnCommand(MusicService.COMMAND_SEEK_TO);
 					if(isPlaying()) {
 						seekBarHandler.sendEmptyMessageDelayed(PROGRESS_INCREASE, 1000);
@@ -157,7 +157,7 @@ public class Main extends Activity {
 				}
 				@Override
 				public void onStartTrackingTouch(SeekBar seekBar) {
-					//½ø¶ÈÌõ»Ö¸´ÒÆ¶¯
+					//è¿›åº¦æ¡æ¢å¤ç§»åŠ¨
 					seekBarHandler.sendEmptyMessage(PROGRESS_PAUSE);
 					
 				}
@@ -165,7 +165,7 @@ public class Main extends Activity {
 				public void onProgressChanged(SeekBar seekBar,int progress,
 						boolean fromUser) {
 					time = progress;
-					//¸üĞÂÎÄ±¾
+					//æ›´æ–°æ–‡æœ¬
 					text_Current.setText(formatTime(time));
 					
 				}
@@ -173,7 +173,7 @@ public class Main extends Activity {
 		}
 		
 		private void moveNumberToNext() {
-			// ÅĞ¶ÏÊÇ·ñµ½´ïÁËÁĞ±íµ×¶Ë
+			// åˆ¤æ–­æ˜¯å¦åˆ°è¾¾äº†åˆ—è¡¨åº•ç«¯
 			if ((number + 1) > list.getCount()) {
 				number = 1;
 				Toast.makeText(Main.this,
@@ -184,7 +184,7 @@ public class Main extends Activity {
 			}
 		}
 		private void moveNumberToPrevious() {
-			// ÅĞ¶ÏÊÇ·ñµ½´ïÁËÁĞ±í¶¥¶Ë
+			// åˆ¤æ–­æ˜¯å¦åˆ°è¾¾äº†åˆ—è¡¨é¡¶ç«¯
 			if (number == 1) {
 				number = list.getCount();
 				Toast.makeText(Main.this,
@@ -198,9 +198,9 @@ public class Main extends Activity {
 		@Override
 		protected void onResume() {
 			super.onResume();
-			// ³õÊ¼»¯ÒôÀÖÁĞ±í
+			// åˆå§‹åŒ–éŸ³ä¹åˆ—è¡¨
 			initMusicList();
-			// Èç¹ûÁĞ±íÃ»ÓĞ¸èÇú£¬Ôò²¥·Å°´Å¥²»¿ÉÓÃ£¬²¢ÌáĞÑÓÃ»§
+			// å¦‚æœåˆ—è¡¨æ²¡æœ‰æ­Œæ›²ï¼Œåˆ™æ’­æ”¾æŒ‰é’®ä¸å¯ç”¨ï¼Œå¹¶æé†’ç”¨æˆ·
 			if (list.getCount() == 0) {
 				imgBtn_Previous.setEnabled(false);
 				imgBtn_PlayOrPause.setEnabled(false);
@@ -214,19 +214,19 @@ public class Main extends Activity {
 				imgBtn_Stop.setEnabled(true);
 				imgBtn_Next.setEnabled(true);
 			}
-			//ÉèÖÃÖ÷Ìâ
+			//è®¾ç½®ä¸»é¢˜
 			PropertyBean property = new PropertyBean(Main.this);
 			String theme = property.getTheme();
 			setTheme(theme);
 		}
 		
-		/** ³õÊ¼»¯ÒôÀÖÁĞ±í¡£°üÀ¨»ñÈ¡ÒôÀÖ¼¯ºÍ¸üĞÂÏÔÊ¾ÁĞ±í */
+		/** åˆå§‹åŒ–éŸ³ä¹åˆ—è¡¨ã€‚åŒ…æ‹¬è·å–éŸ³ä¹é›†å’Œæ›´æ–°æ˜¾ç¤ºåˆ—è¡¨ */
 		private void initMusicList() {
 			Cursor cursor = getMusicCursor();
 			setListContent(cursor);
 		}
 
-		/** ¸üĞÂÁĞ±íµÄÄÚÈİ */
+		/** æ›´æ–°åˆ—è¡¨çš„å†…å®¹ */
 		private void setListContent(Cursor musicCursor) {
 			CursorAdapter adapter = new SimpleCursorAdapter(this,
 					android.R.layout.simple_list_item_2, musicCursor, new String[] {
@@ -236,11 +236,11 @@ public class Main extends Activity {
 			list.setAdapter(adapter);
 		}
 
-		/** »ñÈ¡ÏµÍ³É¨ÃèµÃµ½µÄÒôÀÖÃ½Ìå¼¯ */
+		/** è·å–ç³»ç»Ÿæ‰«æå¾—åˆ°çš„éŸ³ä¹åª’ä½“é›† */
 		private Cursor getMusicCursor() {
-			// »ñÈ¡Êı¾İÑ¡ÔñÆ÷
+			// è·å–æ•°æ®é€‰æ‹©å™¨
 			ContentResolver resolver = getContentResolver();
-			// Ñ¡ÔñÒôÀÖÃ½Ìå¼¯
+			// é€‰æ‹©éŸ³ä¹åª’ä½“é›†
 			Cursor cursor = resolver.query(
 					MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
 					null);
@@ -251,7 +251,7 @@ public class Main extends Activity {
 		private void sendBroadcastOnCommand(int command){
 			Intent intent = new Intent(MusicService.BROADCAST_MUSICSERVICE_CONTROL);
 			intent.putExtra("command", command);
-			//¸ù¾İ²»Í¬ÃüÁî£¬·â×°²»Í¬µÄÊı¾İ
+			//æ ¹æ®ä¸åŒå‘½ä»¤ï¼Œå°è£…ä¸åŒçš„æ•°æ®
 			switch (command){
 			case MusicService.COMMAND_PLAY:
 				intent.putExtra("number",number);
@@ -277,28 +277,28 @@ public class Main extends Activity {
 		}
 		
 		
-		/**ÊÇ·ñÕıÔÚ²¥·Å*/
+		/**æ˜¯å¦æ­£åœ¨æ’­æ”¾*/
 		private boolean isPlaying()
 		{
 			return status == MusicService.STATUS_PLAYING;
 		}
-		/**ÊÇ·ñÔİÍ£²¥·ÅÒôÀÖ*/
+		/**æ˜¯å¦æš‚åœæ’­æ”¾éŸ³ä¹*/
 		private boolean isPaused()
 		{
 			return status == MusicService.STATUS_PAUSED;
 		}
-		/**ÊÇ·ñÊÇÍ£Ö¹×´Ì¬*/
+		/**æ˜¯å¦æ˜¯åœæ­¢çŠ¶æ€*/
 		private boolean isStopped()
 		{
 			return status == MusicService.STATUS_STOPPED;
 		}
 		
-		/**ÓÃÓÚ²¥·ÅÆ÷×´Ì¬¸üĞÂµÄ½ÓÊÕ¹ã²¥*/
+		/**ç”¨äºæ’­æ”¾å™¨çŠ¶æ€æ›´æ–°çš„æ¥æ”¶å¹¿æ’­*/
 		class StatusChangedReceiver extends BroadcastReceiver
 		{
 			public void onReceive(Context context, Intent intent) 
 			{
-				// »ñÈ¡²¥·Å×´Ì¬
+				// è·å–æ’­æ”¾çŠ¶æ€
 				status = intent.getIntExtra("status", -1);
 				switch(status) {
 				case MusicService.STATUS_PLAYING:
@@ -310,12 +310,12 @@ public class Main extends Activity {
 					seekBar.setProgress(time);
 					text_Duration.setText(formatTime(duration));
 					imgBtn_PlayOrPause.setBackgroundResource(R.drawable.pause);
-					//ÉèÖÃActivityµÄ±êÌâÀ¸ÎÄ×Ö£¬ÌáÊ¾ÕıÔÚ²¥·ÅµÄ¸èÇú
+					//è®¾ç½®Activityçš„æ ‡é¢˜æ æ–‡å­—ï¼Œæç¤ºæ­£åœ¨æ’­æ”¾çš„æ­Œæ›²
 					Cursor cursor = Main.this.getMusicCursor();
 					cursor.moveToPosition(number - 1);
 					String title = cursor.getString(cursor
 							.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
-					Main.this.setTitle("ÕıÔÚ²¥·Å£º" + title + "  --- ");
+					Main.this.setTitle("æ­£åœ¨æ’­æ”¾ï¼š" + title + "  --- ");
 					break;
 				case MusicService.STATUS_PAUSED:
 					seekBarHandler.sendEmptyMessage(PROGRESS_PAUSE);
@@ -335,7 +335,7 @@ public class Main extends Activity {
 				}
 			}
 			
-			/** ¸ù¾İ²¥·ÅÆğµÄ×´Ì¬£¬¸üĞÂUI */
+			/** æ ¹æ®æ’­æ”¾èµ·çš„çŠ¶æ€ï¼Œæ›´æ–°UI */
 			private void updateUI(int status)
 			{
 				switch (status)
@@ -354,7 +354,7 @@ public class Main extends Activity {
 			}
 		}
 		
-		//¸ñÊ½»¯£ººÁÃë>> "mm:ss"
+		//æ ¼å¼åŒ–ï¼šæ¯«ç§’>> "mm:ss"
 		private String formatTime(int msec) {
 			int minute = (msec / 1000) / 60;
 			int second = (msec / 1000) % 60;
@@ -373,7 +373,7 @@ public class Main extends Activity {
 			return minuteString + ":" + secondString;
 		}
 		
-		//¸ñÊ½»¯Ê±¼ä
+		//æ ¼å¼åŒ–æ—¶é—´
 		private void initSeekBarHandler() {
 			seekBarHandler = new Handler() {
 				public void handleMessage(Message msg) {
@@ -410,23 +410,23 @@ public class Main extends Activity {
 			super.onDestroy();
 		}
 		
-		//Menu³£Á¿
+		//Menuå¸¸é‡
 		private static final int MENU_THEME = Menu.FIRST;
 		private static final int MENU_ABOUT = Menu.FIRST +1;
-		//´´½¨²Ëµ¥
+		//åˆ›å»ºèœå•
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
-			menu.add(0, MENU_THEME, 0, "Ö÷Ìâ");
-			menu.add(0, MENU_ABOUT, 1, "¹ØÓÚ");
+			menu.add(0, MENU_THEME, 0, "ä¸»é¢˜");
+			menu.add(0, MENU_ABOUT, 1, "å…³äº");
 			return super.onCreateOptionsMenu(menu);		
 		}
 		
-		//´¦Àí²Ëµ¥µ¥µã»÷ÊÂ¼ş
+		//å¤„ç†èœå•å•ç‚¹å‡»äº‹ä»¶
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch(item.getItemId()) {
 			case MENU_THEME:
-				new AlertDialog.Builder(this).setTitle("ÇëÑ¡ÔñÖ÷Ìâ")
+				new AlertDialog.Builder(this).setTitle("è¯·é€‰æ‹©ä¸»é¢˜")
 				        .setItems(R.array.theme, new DialogInterface.OnClickListener() {
 				        	public void onClick(DialogInterface dialog, int which) {
 					/*String[] themes = Main.this.getResources()
@@ -449,17 +449,17 @@ public class Main extends Activity {
 		} 
 		
 		private void setTheme(String theme) {
-			if("ÅİÅİ".equals(theme)) {
+			if("æ³¡æ³¡".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_color);
-			} else if ("×ÖÄ¸".equals(theme)) {
+			} else if ("å­—æ¯".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_a);
-			} else if ("Ê÷Ä¾".equals(theme)) {
+			} else if ("æ ‘æœ¨".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_b);
-			} else if ("¿¨Í¨".equals(theme)) {
+			} else if ("å¡é€š".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_c);
-			} else if ("ÌúËş".equals(theme)) {
+			} else if ("é“å¡”".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_d);
-			} else if ("Ë®¹û".equals(theme)) {
+			} else if ("æ°´æœ".equals(theme)) {
 				root_Layout.setBackgroundResource(R.drawable.bg_e);
 			}
 		}

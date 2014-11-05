@@ -3,9 +3,9 @@ package com.graceplayer.data;
 import java.util.ArrayList;
 
 /*
- * MusicListÀà£¬²ÉÓÃµ¥Ò»ÊµÀı£¬
- * Ö»ÄÜÍ¨¹ıgetMusicList·½·¨»ñÈ¡
- * ¹²Ïí£¬Î¨Ò»µÄArrayList<Music>¶ÔÏó
+ * MusicListç±»ï¼Œé‡‡ç”¨å•ä¸€å®ä¾‹ï¼Œ
+ * åªèƒ½é€šè¿‡getMusicListæ–¹æ³•è·å–
+ * å…±äº«ï¼Œå”¯ä¸€çš„ArrayList<Music>å¯¹è±¡
  * */
 public class MusicList {
 
