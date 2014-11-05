@@ -50,6 +50,12 @@ public class Main extends Activity {
 		private static final int PROGRESS_INCREASE = 0;
 		private static final int PROGRESS_PAUSE = 1;
 		private static final int PROGRESS_RESET = 2;
+		
+		//播放模式常量
+		private static final int MODE_LIST_SEQUENCE = 0;
+		private static final int MODE_SINGLE_CYCLE = 1;
+		private static final int MODE_LIST_CYCLE = 2;
+	
 		//主题
 		private RelativeLayout root_Layout;
 		

@@ -5,4 +5,9 @@
     <string name="tip_reach_bottom">已经到达列表底端，现在播放第一曲</string>
     <string name="tip_no_music_file">没有找到音乐文件，请先添加音乐文件</string>
     <string name="about">这是一个音乐播放器！  你敢信？</string>
+    
+    <string name="playmode">播放模式</string>
+    <string name="sequance">顺序循环</string>
+    <string name="listcycle">列表循环</string>
+    <string name="singlecycle">单曲循环</string>
 </resources>
