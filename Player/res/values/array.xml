@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string-array name="theme">
+        <item>性感</item>
+        <item>美腿</item>
+        <item>水泡</item>
+        <item>吉他</item>
+        <item>汤唯</item>
+    </string-array>
+</resources>
