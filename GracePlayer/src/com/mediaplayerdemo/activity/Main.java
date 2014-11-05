@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 public class Main extends Activity {
 	// ÏÔÊ¾×é¼ş
+	//²âÊÔ
 		private ImageButton imgBtn_Previous;
 		private ImageButton imgBtn_PlayOrPause;
 		private ImageButton imgBtn_Stop;
