@@ -6,17 +6,61 @@
     android:layout_height="fill_parent"
     android:background="@drawable/bg_color"
     android:id="@+id/relativeLayout1">
+    
+    <LinearLayout
+        android:id="@+id/main_volumeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+         <TextView
+             android:id="@+id/main_tv_volumeText"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:text="音量 :100%"
+             android:textColor="#ffffffff"
+             android:textSize="15dp" />
+
+            <SeekBar
+             android:id="@+id/main_sb_volumebar"
+             android:layout_width="82dp"
+             android:layout_height="wrap_content"
+             android:maxHeight="5dip"
+             android:minHeight="5dip"
+             android:progressDrawable="@drawable/seekbar_style"
+             android:thumb="@drawable/seekbar_thumb" />   
+        </LinearLayout>
+    </LinearLayout>
+
+    
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"  
         android:layout_alignParentTop="true"
         android:layout_above="@+id/linearLayout1"
-        android:layout_marginTop="10dip" 
+        android:layout_marginTop="20dip" 
         android:layout_marginLeft="10dip" 
         android:layout_marginRight="10dip" 
         android:background="@drawable/widget_bg"
         android:cacheColorHint="#00000000"/>
+    
+    
     
     <LinearLayout 
         android:layout_height="wrap_content"
@@ -28,6 +72,7 @@
         android:id="@+id/linearLayout1"
         android:layout_alignParentBottom="true" 
         android:background="@drawable/widget_bg" >
+        
 
         
       <LinearLayout android:layout_height="wrap_content" 
@@ -76,21 +121,7 @@
        android:layout_width="wrap_content"
        android:text="00:00"/>
     
-    <TextView 
-       android:id="@+id/main_tv_volumeText"
-       android:layout_height="wrap_content"
-       android:layout_width="fill_parent"
-       android:layout_weight="1"
-       android:text="音量00:00"
-       android:textColor="#ffffffff"
-       android:textSzie="15dp" />
-    <SeekBar android:layout_height="wrap_content"
-            android:id="@+id/main_sb_volumebar" 
-            android:layout_width="89dp"
-            android:maxHeight="5dp"
-            android:minHeight="5dp"
-            android:progressDrawable="@drawable/seekbar_style"
-            android:thumb="@drawable/seekbar_thumb"/>
+   
        
      </RelativeLayout>  
   </LinearLayout>

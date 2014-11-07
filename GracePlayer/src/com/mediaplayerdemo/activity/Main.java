@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.graceplayer.data.Music;
 import com.graceplayer.data.MusicList;
 
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -16,10 +17,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -75,6 +78,11 @@ public class Main extends Activity {
 		private int status;
 		//广播接收器
 		private StatusChangedReceiver receiver;
+		
+		//音量控制
+		private TextView tv_vol;
+		private SeekBar seekbar_vol;
+		
 
 		/** Called when the activity is first created. */
 		@Override
@@ -119,6 +127,9 @@ public class Main extends Activity {
 			text_Current = (TextView) findViewById(R.id.textView1);
 			text_Duration = (TextView) findViewById(R.id.textView2);
 			root_Layout = (RelativeLayout)findViewById(R.id.relativeLayout1);
+			
+			tv_vol = (TextView)findViewById(R.id.main_tv_volumeText);
+			seekbar_vol = (SeekBar)findViewById(R.id.main_sb_volumebar);
 		}
 
 		/** 为显示组件注册监听器 */
@@ -231,6 +242,7 @@ public class Main extends Activity {
 			PropertyBean property = new PropertyBean(Main.this);
 			String theme = property.getTheme();
 			setTheme(theme);
+			audio_Control();//onResume方法中调用audio_Control方法
 		}
 		
 		//** 初始化音乐列表。包括获取音乐集和更新显示列表 */
@@ -443,6 +455,7 @@ public class Main extends Activity {
 			super.onDestroy();
 		}
 		
+		
 		//Menu常量
 		private static final int MENU_THEME = Menu.FIRST;
 		private static final int MENU_ABOUT = Menu.FIRST +1;
@@ -538,5 +551,64 @@ public class Main extends Activity {
 				root_Layout.setBackgroundResource(R.drawable.bg_e);
 			}
 		}
+	//更改音量显示	
+		@Override
+		public boolean onKeyDown(int keyCode, KeyEvent event) {
+			// TODO Auto-generated method stub
+			int progress;
+			switch(keyCode)
+			{
+			case KeyEvent.KEYCODE_BACK:
+				//exitByDoubleClick();
+				break;
+			case KeyEvent.KEYCODE_VOLUME_DOWN:
+				progress = seekbar_vol.getProgress();
+				if(progress != 0)
+					seekbar_vol.setProgress(progress-1);
+				return true;
+			case KeyEvent.KEYCODE_VOLUME_UP:
+				progress = seekbar_vol.getProgress();
+				if(progress != seekbar_vol.getMax())
+					seekbar_vol.setProgress(progress+1);
+				return true;
+			default:
+					break;
+			}
+			return false;
+		}
+		
+		private void audio_Control()
+		{
+			//获取音量管理器
+				final AudioManager audioManager = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
+				//设置当前调整音量大小只是针对媒体音乐
+				this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				//设置滑动条最大值
+				final int max_progress = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+				seekbar_vol.setMax(max_progress); 
+				//获取当前音量
+				int progress = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+				seekbar_vol.setProgress(progress);
+				
+				tv_vol .setText("音量： "+(progress*100/max_progress)+"%"); 
+				
+				seekbar_vol.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					@Override
+					public void onStopTrackingTouch(SeekBar arg0) {
+						// TODO Auto-generated method stub
+					}
+					@Override
+					public void onStartTrackingTouch(SeekBar arg0) {
+						// TODO Auto-generated method stub
+					}
+					@Override
+					public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+						// TODO Auto-generated method stub
+						tv_vol .setText("音量： "+(arg1*100)/(max_progress)+"%");
+						audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, arg1, AudioManager.FLAG_PLAY_SOUND);
+					}
+				});
+		}
 	
+		
 }
