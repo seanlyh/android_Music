@@ -115,6 +115,16 @@
        android:layout_height="wrap_content"
        android:layout_width="wrap_content"
        android:text="00:00"/>
+   
+   <ImageView 
+       android:layout_toRightOf="@+id/main_tv_curtime"
+       android:layout_marginLeft="40dp"
+       android:id="@+id/main_iv_sleep"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@drawable/sleep"
+       android:background="@drawable/sleep" />
+   
     <TextView android:layout_alignParentRight="true"
        android:id="@+id/textView2"
        android:layout_height="wrap_content"

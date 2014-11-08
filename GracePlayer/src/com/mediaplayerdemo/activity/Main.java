@@ -3,9 +3,15 @@ package com.mediaplayerdemo.activity;
 
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+
 
 import com.graceplayer.data.Music;
 import com.graceplayer.data.MusicList;
+
+
 
 
 import android.app.Activity;
@@ -29,11 +35,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -83,6 +93,16 @@ public class Main extends Activity {
 		private TextView tv_vol;
 		private SeekBar seekbar_vol;
 		
+		//睡眠模式相关组件，标识常量
+		private ImageView iv_sleep;
+		private Timer timer_sleep ;
+		private static final boolean NOTSLEEP = false;
+		private static final boolean ISSLEEP = true;
+		//默认的睡眠时间
+		private int sleepminute = 20;
+		//标记是否打开睡眠模式
+		private static boolean sleepmode;
+		
 
 		/** Called when the activity is first created. */
 		@Override
@@ -105,7 +125,10 @@ public class Main extends Activity {
 			initSeekBarHandler();
 			
 			//默认播放模式是顺讯播放
-			//playmode = Main.MODE_LIST_SEQUENCE;
+			playmode = Main.MODE_LIST_SEQUENCE;
+			//默认睡眠模式为关闭模式
+			sleepmode = Main.NOTSLEEP;
+			
 		}
 		
 		/**绑定广播接收器*/
@@ -130,6 +153,7 @@ public class Main extends Activity {
 			
 			tv_vol = (TextView)findViewById(R.id.main_tv_volumeText);
 			seekbar_vol = (SeekBar)findViewById(R.id.main_sb_volumebar);
+			iv_sleep = (ImageView)findViewById(R.id.main_iv_sleep);
 		}
 
 		/** 为显示组件注册监听器 */
@@ -243,6 +267,11 @@ public class Main extends Activity {
 			String theme = property.getTheme();
 			setTheme(theme);
 			audio_Control();//onResume方法中调用audio_Control方法
+			
+			//睡眠模式打开是显示图标，关闭时隐藏图标
+			if(sleepmode == Main.ISSLEEP) iv_sleep.setVisibility(View.VISIBLE);
+			else iv_sleep.setVisibility(View.INVISIBLE);
+			
 		}
 		
 		//** 初始化音乐列表。包括获取音乐集和更新显示列表 */
@@ -460,6 +489,7 @@ public class Main extends Activity {
 		private static final int MENU_THEME = Menu.FIRST;
 		private static final int MENU_ABOUT = Menu.FIRST +1;
 		private static final int MENU_PLAYMODE = Menu.FIRST +2;
+		private static final int MENU_SLEEP = Menu.FIRST +3;
 
 		//创建菜单
 		@Override
@@ -467,6 +497,7 @@ public class Main extends Activity {
 			menu.add(0, MENU_THEME, 0, "主题");
 			menu.add(0, MENU_ABOUT, 1, "关于");
 			menu.add(0, MENU_PLAYMODE, 2, "播放模式");
+			menu.add(0, MENU_SLEEP, 3, "睡眠模式");
 			return super.onCreateOptionsMenu(menu);		
 		}
 		
@@ -531,7 +562,11 @@ public class Main extends Activity {
 							}
 						});
 				builder.create().show(); 
-				break;		
+				break;
+				
+			case MENU_SLEEP:
+				showSleepDialog();
+				break;
 			}
 			return super.onOptionsItemSelected(item);
 		} 
@@ -610,5 +645,107 @@ public class Main extends Activity {
 				});
 		}
 	
-		
+		private void showSleepDialog()   
+		{
+			//先用getLayoutInflater().inflate方法获取布局，用来初始化一个View类对象
+			final View userview = this.getLayoutInflater().inflate(R.layout.dialog, null);
+			
+		    //通过View类的findViewById方法获取到组件对象
+			final TextView tv_minute = (TextView)userview.findViewById(R.id.dialog_tv);
+			final Switch switch1 = (Switch)userview.findViewById(R.id.dialog_switch);
+			final SeekBar seekbar = (SeekBar)userview.findViewById(R.id.dialog_seekbar);
+			
+			tv_minute.setText("睡眠于:"+sleepminute+"分钟");
+			//根据当前的睡眠状态来确定Switch的状态
+			if(sleepmode == Main.ISSLEEP) switch1.setChecked(true);
+			seekbar.setMax(60);
+			seekbar.setProgress(sleepminute);
+			seekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+				
+				@Override
+				public void onStopTrackingTouch(SeekBar arg0) {
+					// TODO Auto-generated method stub
+				
+				}
+				@Override
+				public void onStartTrackingTouch(SeekBar arg0) {
+					// TODO Auto-generated method stub
+				}
+				@Override
+				public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
+					// TODO Auto-generated method stub
+					sleepminute = arg1;
+					tv_minute.setText("睡眠于:"+sleepminute+"分钟");
+					
+				}
+			});
+			switch1.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+				
+				@Override
+				public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+					// TODO Auto-generated method stub
+					sleepmode = arg1;
+				}
+			});
+			//定义定时器任务
+			final TimerTask timerTask = new TimerTask() {
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					System.exit(0);
+				}
+			};
+			//定义对话框以及初始化
+			final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+			dialog.setTitle("选择睡眠时间(0~60分钟)");
+			//设置布局
+			dialog.setView(userview);
+			//设置取消按钮响应事件
+			dialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					arg0.dismiss();
+				}
+			});
+			//设置重置按钮响应时间
+			dialog.setNeutralButton("重置", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					sleepmode = Main.NOTSLEEP;
+					sleepminute = 20;
+					timerTask.cancel();
+					timer_sleep.cancel();
+					iv_sleep.setVisibility(View.INVISIBLE);
+				}
+			});
+			//设置确定按钮响应事件
+			dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface arg0, int arg1) {
+					// TODO Auto-generated method stub
+					if(sleepmode == Main.ISSLEEP)
+					{
+						timer_sleep = new Timer();
+						int time =seekbar.getProgress();
+						//启动任务，time*60*1000毫秒后执行
+						timer_sleep.schedule(timerTask, time*60*1000);
+						iv_sleep.setVisibility(View.VISIBLE);
+					}
+					else
+					{
+						//取消任务
+						timerTask.cancel();
+						timer_sleep.cancel();
+						arg0.dismiss();
+						iv_sleep.setVisibility(View.INVISIBLE);
+					}
+				}
+			});
+			
+			dialog.show();
+		}
 }
