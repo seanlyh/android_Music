@@ -2,6 +2,8 @@ package com.mediaplayerdemo.activity;
 
 
 
+
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -57,6 +59,7 @@ public class MusicService extends Service {
 	}
 	@Override
 	public void onDestroy(){
+		sendBroadcastOnStatusChanged(MusicService.STATUS_STOPPED);
 		//释放播放器资源
 		if(player2 !=null){
 			player2.release();
